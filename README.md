@@ -67,6 +67,12 @@ keys:
 
 This extension uses the [cyphera](https://crates.io/crates/cyphera) Rust crate compiled as a native PostgreSQL extension via pgrx. FF1/FF3 format-preserving encryption runs inside the Postgres process — no network calls, no external services.
 
+## Distribution
+
+Currently distributed as a Docker image. For self-hosted Postgres, build from source with `cargo pgrx`.
+
+PGXN and cloud provider extension registries (AWS RDS, GCP Cloud SQL, Supabase) are on the roadmap pending community traction.
+
 ## Status
 
 Alpha. Uses `cyphera` crate from crates.io.

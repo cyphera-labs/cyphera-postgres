@@ -1,0 +1,38 @@
+{
+  "name": "cyphera_postgres",
+  "abstract": "Format-preserving encryption (FPE) for PostgreSQL — FF1/FF3, AES-GCM, masking, hashing",
+  "version": "0.0.1",
+  "maintainer": "Leslie Gutschow <leslie.gutschow@horizondigital.dev>",
+  "license": "apache_2_0",
+  "release_status": "testing",
+  "provides": {
+    "cyphera_postgres": {
+      "abstract": "Format-preserving encryption functions for PostgreSQL",
+      "file": "src/lib.rs",
+      "version": "0.0.1"
+    }
+  },
+  "prereqs": {
+    "runtime": {
+      "requires": {
+        "PostgreSQL": "14.0.0"
+      }
+    }
+  },
+  "resources": {
+    "homepage": "https://cyphera.io",
+    "bugtracker": {
+      "web": "https://github.com/cyphera-labs/cyphera-postgres/issues"
+    },
+    "repository": {
+      "url": "https://github.com/cyphera-labs/cyphera-postgres.git",
+      "web": "https://github.com/cyphera-labs/cyphera-postgres",
+      "type": "git"
+    }
+  },
+  "tags": ["encryption", "fpe", "format-preserving", "security", "data-protection", "masking"],
+  "meta-spec": {
+    "version": "1.0.0",
+    "url": "https://pgxn.org/meta/spec.txt/"
+  }
+}
