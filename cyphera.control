@@ -1,4 +1,0 @@
-comment = 'Cyphera format-preserving encryption UDFs'
-default_version = '1.0'
-module_pathname = '$libdir/cyphera_udf'
-relocatable = true

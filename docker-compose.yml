@@ -6,3 +6,6 @@ services:
     environment:
       POSTGRES_PASSWORD: cyphera
       POSTGRES_DB: cyphera_demo
+      CYPHERA_POLICY_FILE: /etc/cyphera/cyphera.yaml
+    volumes:
+      - ./config/cyphera.yaml:/etc/cyphera/cyphera.yaml:ro

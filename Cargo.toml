@@ -1,0 +1,31 @@
+[package]
+name = "cyphera_postgres"
+version = "0.0.1-alpha.1"
+edition = "2021"
+license = "Apache-2.0"
+repository = "https://github.com/cyphera-labs/cyphera-postgres"
+description = "Cyphera format-preserving encryption extension for PostgreSQL"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[features]
+default = ["pg17"]
+pg14 = ["pgrx/pg14", "pgrx-tests/pg14"]
+pg15 = ["pgrx/pg15", "pgrx-tests/pg15"]
+pg16 = ["pgrx/pg16", "pgrx-tests/pg16"]
+pg17 = ["pgrx/pg17", "pgrx-tests/pg17"]
+
+[dependencies]
+pgrx = "0.13"
+cyphera = "0.0.1-alpha.1"
+serde_yaml = "0.9"
+once_cell = "1.19"
+hex = "0.4"
+
+[dev-dependencies]
+pgrx-tests = "0.13"
+
+[[bin]]
+name = "pgrx_embed_cyphera_postgres"
+path = "src/bin/pgrx_embed.rs"

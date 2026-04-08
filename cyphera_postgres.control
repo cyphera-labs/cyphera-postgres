@@ -1,0 +1,5 @@
+comment = 'Cyphera format-preserving encryption for PostgreSQL'
+default_version = '@CARGO_VERSION@'
+module_pathname = '$libdir/cyphera_postgres'
+relocatable = false
+superuser = true
