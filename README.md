@@ -49,18 +49,17 @@ FROM (VALUES
 
 ## Policy Configuration
 
-Place `cyphera.yaml` at `/etc/cyphera/cyphera.yaml` or set `CYPHERA_POLICY_FILE`.
+Place `cyphera.json` at `/etc/cyphera/cyphera.json` or set `CYPHERA_POLICY_FILE`.
 
-```yaml
-policies:
-  ssn:
-    engine: ff1
-    key_ref: demo-key
-    tag: T01
-
-keys:
-  demo-key:
-    material: "2B7E151628AED2A6ABF7158809CF4F3C"
+```json
+{
+  "policies": {
+    "ssn": { "engine": "ff1", "key_ref": "demo-key", "tag": "T01" }
+  },
+  "keys": {
+    "demo-key": { "material": "2B7E151628AED2A6ABF7158809CF4F3C" }
+  }
+}
 ```
 
 ## How It Works

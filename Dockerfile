@@ -32,9 +32,9 @@ FROM postgres:17-bookworm
 COPY --from=builder /app/target/release/cyphera_postgres-pg17/usr /usr
 
 # Copy policy config
-COPY config/cyphera.yaml /etc/cyphera/cyphera.yaml
+COPY config/cyphera.json /etc/cyphera/cyphera.json
 
-ENV CYPHERA_POLICY_FILE=/etc/cyphera/cyphera.yaml
+ENV CYPHERA_POLICY_FILE=/etc/cyphera/cyphera.json
 
 # Auto-create extension on startup
 COPY init.sql /docker-entrypoint-initdb.d/

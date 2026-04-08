@@ -5,10 +5,10 @@ use std::sync::Mutex;
 
 pgrx::pg_module_magic!();
 
-/// Global Cyphera client — loaded once from YAML policy file.
+/// Global Cyphera client — loaded once from JSON policy file.
 static CLIENT: Lazy<Mutex<Option<Client>>> = Lazy::new(|| {
     let path = std::env::var("CYPHERA_POLICY_FILE")
-        .unwrap_or_else(|_| "/etc/cyphera/cyphera.yaml".to_string());
+        .unwrap_or_else(|_| "/etc/cyphera/cyphera.json".to_string());
 
     match load_client(&path) {
         Ok(client) => {
@@ -25,16 +25,16 @@ static CLIENT: Lazy<Mutex<Option<Client>>> = Lazy::new(|| {
 fn load_client(path: &str) -> Result<Client, String> {
     let contents = std::fs::read_to_string(path)
         .map_err(|e| format!("failed to read {}: {}", path, e))?;
-    let config: serde_yaml::Value = serde_yaml::from_str(&contents)
-        .map_err(|e| format!("failed to parse YAML: {}", e))?;
+    let config: serde_json::Value = serde_json::from_str(&contents)
+        .map_err(|e| format!("failed to parse JSON: {}", e))?;
 
     // Extract policies
-    let pf = PolicyFile::from_yaml(&contents)
+    let pf = PolicyFile::from_json(&contents)
         .map_err(|e| format!("failed to load policies: {}", e))?;
 
     // Extract keys and build MemoryProvider
     let mut key_records = Vec::new();
-    if let Some(keys) = config.get("keys").and_then(|k| k.as_mapping()) {
+    if let Some(keys) = config.get("keys").and_then(|k| k.as_object()) {
         for (name, val) in keys {
             if let (Some(name_str), Some(material_str)) = (
                 name.as_str(),
