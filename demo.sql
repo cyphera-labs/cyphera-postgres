@@ -5,7 +5,7 @@
 SELECT cyphera_protect('ssn', '123-45-6789') AS protected_ssn;
 
 -- Access using embedded tag (no policy name needed)
-SELECT cyphera_unprotect(cyphera_protect('ssn', '123-45-6789')) AS accessed_ssn;
+SELECT cyphera_access(cyphera_protect('ssn', '123-45-6789')) AS accessed_ssn;
 
 -- Access with explicit policy
 SELECT cyphera_access('ssn', cyphera_protect('ssn', '123-45-6789')) AS accessed_ssn;
@@ -14,7 +14,7 @@ SELECT cyphera_access('ssn', cyphera_protect('ssn', '123-45-6789')) AS accessed_
 SELECT
     '123-45-6789' AS original,
     cyphera_protect('ssn', '123-45-6789') AS protected,
-    cyphera_unprotect(cyphera_protect('ssn', '123-45-6789')) AS accessed;
+    cyphera_access(cyphera_protect('ssn', '123-45-6789')) AS accessed;
 
 -- Bulk example
 SELECT

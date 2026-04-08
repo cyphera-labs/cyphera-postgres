@@ -85,10 +85,10 @@ fn cyphera_protect(policy_name: &str, value: &str) -> String {
     })
 }
 
-/// Access (decrypt) a protected value using the embedded tag.
+/// Access a protected value using the embedded tag.
 /// No policy name needed — the tag identifies the policy.
 #[pg_extern]
-fn cyphera_unprotect(protected_value: &str) -> String {
+fn cyphera_access(protected_value: &str) -> String {
     with_client(|client| {
         match client.access_by_tag(protected_value) {
             Ok(result) => result.output,
@@ -97,10 +97,10 @@ fn cyphera_unprotect(protected_value: &str) -> String {
     })
 }
 
-/// Access (decrypt) a protected value with explicit policy name.
+/// Access a protected value with explicit policy name.
 /// Use this for untagged values.
-#[pg_extern]
-fn cyphera_access(policy_name: &str, protected_value: &str) -> String {
+#[pg_extern(name = "cyphera_access")]
+fn cyphera_access_with_policy(policy_name: &str, protected_value: &str) -> String {
     with_client(|client| {
         match client.access(policy_name, protected_value) {
             Ok(result) => result.output,

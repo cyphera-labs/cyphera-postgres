@@ -1,4 +1,3 @@
-*.o
+target/
 *.so
-*.bc
-.DS_Store
+*.dylib

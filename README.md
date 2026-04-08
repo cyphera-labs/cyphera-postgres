@@ -6,7 +6,7 @@ Cyphera format-preserving encryption extension for PostgreSQL 17. Built with [pg
 SELECT
     '123-45-6789' AS original,
     cyphera_protect('ssn', '123-45-6789') AS protected,
-    cyphera_unprotect(cyphera_protect('ssn', '123-45-6789')) AS accessed;
+    cyphera_access(cyphera_protect('ssn', '123-45-6789')) AS accessed;
 
   original   |   protected    |  accessed
 -------------+----------------+-------------
@@ -29,7 +29,7 @@ SELECT cyphera_protect('ssn', '123-45-6789');
 -- → T01i6J-xF-07pX
 
 -- Access using embedded tag (no policy name needed)
-SELECT cyphera_unprotect(cyphera_protect('ssn', '123-45-6789'));
+SELECT cyphera_access(cyphera_protect('ssn', '123-45-6789'));
 -- → 123-45-6789
 
 -- Bulk
