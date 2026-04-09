@@ -1,0 +1,13 @@
+name: CI
+on:
+  push: { branches: [main] }
+  pull_request: { branches: [main] }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo install cargo-pgrx --version 0.13.1 --locked
+      - run: cargo pgrx init --pg17 download
+      - run: cargo build --features pg17
