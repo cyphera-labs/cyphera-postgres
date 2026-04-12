@@ -36,14 +36,11 @@ fn load_client(path: &str) -> Result<Client, String> {
     let mut key_records = Vec::new();
     if let Some(keys) = config.get("keys").and_then(|k| k.as_object()) {
         for (name, val) in keys {
-            if let (Some(name_str), Some(material_str)) = (
-                name.as_str(),
-                val.get("material").and_then(|m| m.as_str()),
-            ) {
+            if let Some(material_str) = val.get("material").and_then(|m| m.as_str()) {
                 let material = hex::decode(material_str)
-                    .map_err(|e| format!("bad key hex for {}: {}", name_str, e))?;
+                    .map_err(|e| format!("bad key hex for {}: {}", name, e))?;
                 key_records.push(KeyRecord {
-                    key_ref: name_str.to_string(),
+                    key_ref: name.to_string(),
                     version: 1,
                     status: KeyStatus::Active,
                     material,

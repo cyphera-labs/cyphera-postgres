@@ -452,14 +452,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "cyphera-postgres"
+name = "cyphera_postgres"
 version = "0.0.1-alpha.1"
 dependencies = [
  "cyphera",
+ "hex",
  "once_cell",
  "pgrx",
  "pgrx-tests",
- "serde_yaml",
+ "serde_json",
 ]
 
 [[package]]
