@@ -24,7 +24,7 @@ once_cell = "1.19"
 hex = "0.4"
 
 [dev-dependencies]
-pgrx-tests = "0.13"
+pgrx-tests = "0.17"
 
 [[bin]]
 name = "pgrx_embed_cyphera_postgres"
