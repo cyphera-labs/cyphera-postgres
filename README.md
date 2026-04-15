@@ -1,6 +1,7 @@
 # cyphera-postgres
 
 [![CI](https://github.com/cyphera-labs/cyphera-postgres/actions/workflows/ci.yml/badge.svg)](https://github.com/cyphera-labs/cyphera-postgres/actions/workflows/ci.yml)
+[![Security](https://github.com/cyphera-labs/cyphera-postgres/actions/workflows/codeql.yml/badge.svg)](https://github.com/cyphera-labs/cyphera-postgres/actions/workflows/codeql.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
 
 Format-preserving encryption for [PostgreSQL](https://www.postgresql.org/) — native Rust extension powered by Cyphera.
