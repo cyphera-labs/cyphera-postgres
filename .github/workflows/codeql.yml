@@ -16,7 +16,17 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
-      - run: cargo clippy --workspace -- -D warnings
+      - name: Install PostgreSQL 17 dev
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq curl gnupg lsb-release
+          curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo gpg --dearmor -o /usr/share/keyrings/pgdg.gpg
+          echo "deb [signed-by=/usr/share/keyrings/pgdg.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-server-dev-17 postgresql-17 pkg-config libssl-dev libreadline-dev zlib1g-dev
+      - run: cargo install cargo-pgrx --version 0.13.1 --locked
+      - run: cargo pgrx init --pg17 /usr/lib/postgresql/17/bin/pg_config
+      - run: cargo clippy --features pg17 -- -D warnings
 
   audit:
     runs-on: ubuntu-latest
