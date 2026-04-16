@@ -1,3 +1,5 @@
+#![allow(clippy::manual_is_multiple_of)]
+
 use pgrx::prelude::*;
 use cyphera::{Client, PolicyFile, MemoryProvider, KeyRecord, KeyStatus};
 use once_cell::sync::Lazy;
