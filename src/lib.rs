@@ -1,15 +1,15 @@
 #![allow(clippy::manual_is_multiple_of)]
 
 use pgrx::prelude::*;
-use cyphera::{Client, PolicyFile, MemoryProvider, KeyRecord, KeyStatus};
+use cyphera::{Client, ConfigurationFile, MemoryProvider, KeyRecord, KeyStatus};
 use once_cell::sync::Lazy;
 use std::sync::Mutex;
 
 pgrx::pg_module_magic!();
 
-/// Global Cyphera client — loaded once from JSON policy file.
+/// Global Cyphera client — loaded once from JSON configuration file.
 static CLIENT: Lazy<Mutex<Option<Client>>> = Lazy::new(|| {
-    let path = std::env::var("CYPHERA_POLICY_FILE")
+    let path = std::env::var("CYPHERA_CONFIGURATION_FILE")
         .unwrap_or_else(|_| "/etc/cyphera/cyphera.json".to_string());
 
     match load_client(&path) {
@@ -30,9 +30,9 @@ fn load_client(path: &str) -> Result<Client, String> {
     let config: serde_json::Value = serde_json::from_str(&contents)
         .map_err(|e| format!("failed to parse JSON: {}", e))?;
 
-    // Extract policies
-    let pf = PolicyFile::from_json(&contents)
-        .map_err(|e| format!("failed to load policies: {}", e))?;
+    // Extract configurations
+    let cf = ConfigurationFile::from_json(&contents)
+        .map_err(|e| format!("failed to load configurations: {}", e))?;
 
     // Extract keys and build MemoryProvider
     let mut key_records = Vec::new();
@@ -53,7 +53,7 @@ fn load_client(path: &str) -> Result<Client, String> {
     }
 
     let provider = MemoryProvider::new(key_records);
-    Client::from_policy(pf, Box::new(provider))
+    Client::from_configuration(cf, Box::new(provider))
         .map_err(|e| format!("failed to create client: {}", e))
 }
 
@@ -66,42 +66,42 @@ where
     match guard.as_ref() {
         Some(client) => f(client),
         None => {
-            pgrx::warning!("Cyphera SDK not loaded — check CYPHERA_POLICY_FILE");
+            pgrx::warning!("Cyphera SDK not loaded — check CYPHERA_CONFIGURATION_FILE");
             T::default()
         }
     }
 }
 
-/// Protect a value using a named policy.
-/// Returns tagged ciphertext with passthrough characters preserved.
+/// Protect a value using a named configuration.
+/// Returns header-prefixed ciphertext with passthrough characters preserved.
 #[pg_extern]
-fn cyphera_protect(policy_name: &str, value: &str) -> String {
+fn cyphera_protect(configuration_name: &str, value: &str) -> String {
     with_client(|client| {
-        match client.protect(policy_name, value) {
+        match client.protect(configuration_name, value) {
             Ok(result) => result.output,
             Err(e) => format!("[error: {}]", e),
         }
     })
 }
 
-/// Access a protected value using the embedded tag.
-/// No policy name needed — the tag identifies the policy.
+/// Access a protected value using the embedded header.
+/// No configuration name needed — the header identifies the configuration.
 #[pg_extern]
 fn cyphera_access(protected_value: &str) -> String {
     with_client(|client| {
-        match client.access_by_tag(protected_value) {
+        match client.access_by_header(protected_value) {
             Ok(result) => result.output,
             Err(e) => format!("[error: {}]", e),
         }
     })
 }
 
-/// Access a protected value with explicit policy name.
-/// Use this for untagged values.
+/// Access a protected value with explicit configuration name.
+/// Use this for values without a header.
 #[pg_extern(name = "cyphera_access")]
-fn cyphera_access_with_policy(policy_name: &str, protected_value: &str) -> String {
+fn cyphera_access_with_configuration(configuration_name: &str, protected_value: &str) -> String {
     with_client(|client| {
-        match client.access(policy_name, protected_value) {
+        match client.access(configuration_name, protected_value) {
             Ok(result) => result.output,
             Err(e) => format!("[error: {}]", e),
         }
