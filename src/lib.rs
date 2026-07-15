@@ -89,7 +89,7 @@ fn cyphera_protect(configuration_name: &str, value: &str) -> String {
 #[pg_extern]
 fn cyphera_access(protected_value: &str) -> String {
     with_client(|client| {
-        match client.access_by_header(protected_value) {
+        match client.access(protected_value) {
             Ok(result) => result.output,
             Err(e) => format!("[error: {}]", e),
         }
@@ -101,7 +101,7 @@ fn cyphera_access(protected_value: &str) -> String {
 #[pg_extern(name = "cyphera_access")]
 fn cyphera_access_with_configuration(configuration_name: &str, protected_value: &str) -> String {
     with_client(|client| {
-        match client.access(configuration_name, protected_value) {
+        match client.access_with_config(configuration_name, protected_value) {
             Ok(result) => result.output,
             Err(e) => format!("[error: {}]", e),
         }
